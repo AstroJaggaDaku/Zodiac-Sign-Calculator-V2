@@ -5,7 +5,7 @@ import { getRemedy } from "../engine/remedy";
 
 /* ✅ GOOGLE SHEET WEB APP (FINAL) */
 const SHEET_URL =
-  "https://script.google.com/macros/s/AKfycbwyPFqbVg1g_cQnZTwoMLxOLW7RZXDI_m0igRxjpb4/dev";
+  "https://script.google.com/macros/s/AKfycbwdEO_wKJzeFVCenCFy4ySnWmeG3kSTDeckv9SRqpt-ZhERf05CE3Iyl6cPcXmJuQUh/exec";
 
 export default async function handler(req, res) {
 
@@ -94,3 +94,4 @@ export default async function handler(req, res) {
     });
   }
 }
+
