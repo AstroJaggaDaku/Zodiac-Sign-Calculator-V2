@@ -6,7 +6,7 @@ import { getRemedy } from "../engine/remedy";
 
 /* ✅ Google Sheet Web App (POST only, server-to-server) */
 const SHEET_URL =
-  "https://script.google.com/macros/s/AKfycbwdYfN9wAfP-7YPweJaobZT045iHF6ttBOXpuWtYf4Av45qfrYMBXFllp6Q-qOwVu-D/exec";
+  "https://script.google.com/macros/s/AKfycbwdEO_wKJzeFVCenCFy4ySnWmeG3kSTDeckv9SRqpt-ZhERf05CE3Iyl6cPcXmJuQUh/exec";
 
 export default async function handler(req, res) {
 
@@ -95,3 +95,4 @@ export default async function handler(req, res) {
     });
   }
 }
+
