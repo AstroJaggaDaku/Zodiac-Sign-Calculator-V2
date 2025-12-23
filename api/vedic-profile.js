@@ -1,12 +1,11 @@
-import fetch from "node-fetch";
 import { getVedicMoon } from "../engine/vedicMoon";
 import { getNakshatra } from "../engine/nakshatra";
 import { getNumerology } from "../engine/numerology";
 import { getRemedy } from "../engine/remedy";
 
-/* ✅ Google Sheet Web App (POST only, server-to-server) */
+/* ✅ GOOGLE SHEET WEB APP (FINAL) */
 const SHEET_URL =
-  "https://script.google.com/macros/s/AKfycbwdEO_wKJzeFVCenCFy4ySnWmeG3kSTDeckv9SRqpt-ZhERf05CE3Iyl6cPcXmJuQUh/exec";
+  "https://script.google.com/macros/s/AKfycbwyPFqbVg1g_cQnZTwoMLxOLW7RZXDI_m0igRxjpb4/dev";
 
 export default async function handler(req, res) {
 
@@ -17,6 +16,7 @@ export default async function handler(req, res) {
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
+  /* ✅ PREFLIGHT */
   if (req.method === "OPTIONS") {
     return res.status(200).end();
   }
@@ -43,7 +43,7 @@ export default async function handler(req, res) {
     }
 
     /* ===============================
-       🌙 VEDIC CALCULATION (CORE)
+       🌙 VEDIC CALCULATION (VERCEL)
     =============================== */
     const moon = getVedicMoon(dob, time);
     const nakshatra = getNakshatra(
@@ -53,14 +53,13 @@ export default async function handler(req, res) {
     const remedy = getRemedy(moon.sign);
 
     /* ===============================
-       📄 SAVE TO GOOGLE SHEET
-       (SERVER → SERVER, NO CORS)
+       📄 GOOGLE SHEET SAVE (SILENT)
+       ❗ UI কখনো block হবে না
     =============================== */
-    await fetch(SHEET_URL, {
+    fetch(SHEET_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        timestamp: new Date().toISOString(),
         name,
         phone,
         dob,
@@ -72,10 +71,10 @@ export default async function handler(req, res) {
         life_path: numerology.life_path,
         source: "Odoo – 51kalibari"
       })
-    });
+    }).catch(() => {});
 
     /* ===============================
-       ✅ FINAL RESPONSE TO ODOO
+       ✅ FINAL RESPONSE (ONLY JSON)
     =============================== */
     return res.status(200).json({
       branding: "Astrologer Joydev Sastri",
@@ -85,14 +84,13 @@ export default async function handler(req, res) {
       numerology,
       remedy,
       prediction:
-        `${moon.sign} রাশিতে চন্দ্র অবস্থানের ফলে আজ মানসিক শক্তি, কর্মদক্ষতা ও সিদ্ধান্ত গ্রহণে ইতিবাচক প্রভাব পড়বে। ধৈর্য ও আত্মবিশ্বাস বজায় রাখলে সাফল্য নিশ্চিত।`
+        `${moon.sign} রাশিতে চন্দ্র অবস্থান জাতকের মানসিক শক্তি, কর্মপ্রবণতা ও সিদ্ধান্ত গ্রহণে গভীর প্রভাব ফেলে। ধৈর্য ও আত্মবিশ্বাস বজায় রাখলে সাফল্য নিশ্চিত।`
     });
 
   } catch (err) {
-    console.error("Vedic API Error:", err);
+    console.error("Vedic Engine Error:", err);
     return res.status(500).json({
       error: "Internal astrology engine error"
     });
   }
 }
-
